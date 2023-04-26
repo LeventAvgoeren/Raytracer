@@ -1,4 +1,4 @@
-package cgg.a01;
+package cgg.a02;
 
 import cgtools.Color;
 

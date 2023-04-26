@@ -1,5 +1,5 @@
 /** @author henrik.tramberend@beuth-hochschule.de */
-package cgg.a01;
+package cgg.a02;
 
 import cgtools.*;
 

@@ -1,7 +1,11 @@
 /** @author henrik.tramberend@beuth-hochschule.de */
 package cgg;
-
+import java.util.*;
 import cgtools.*;
+import cgtools.Random;
+
+import static cgtools.Vector.*;
+import cgg.a02.Disc;
 
 public class Image {
 
@@ -17,17 +21,29 @@ public class Image {
 
   public void setPixel(int x, int y, Color color) {
     //zu weisung der pixel 
-  int i=(y*width+x)*3;
-  array[i+0]=color.r();
-  array[i+1]=color.g();
-  array[i+2]=color.b();
+    int i = 3 * (y * width + x);
+    double gamma = 2.2;
+    array[i + 0] = Math.pow(color.r(), 1/gamma);
+    array[i + 1] = Math.pow(color.g(), 1/gamma);
+    array[i + 2] = Math.pow(color.b(), 1/gamma);
   }
 
   public void write(String filename) {
     ImageWriter.write(filename,array,width,height);
   }
-  private void notYetImplemented() {
-    System.err.println("Please complete the implementation of class cgg.Image as part of assignment 1.");
-    System.exit(1);
+
+  public void sample(Disc disc, int runden) {
+    for (int x = 0; x < this.width; x++) {
+        for (int y = 0; y < this.height; y++) {
+            Color sampleColor = new Color(0, 0, 0);
+            for (int i = 0; i < runden; i++) {
+                Color pixelColor = disc.coloredDiscs(x + Random.random(), y + Random.random());
+                sampleColor = new Color(sampleColor.r() + pixelColor.r(), sampleColor.g() + pixelColor.g(), sampleColor.b() + pixelColor.b());
+            }
+            sampleColor = new Color(sampleColor.r() / runden, sampleColor.g() / runden, sampleColor.b() / runden);
+            setPixel(x, y, sampleColor);
+        }
+    }
+
   }
 }
