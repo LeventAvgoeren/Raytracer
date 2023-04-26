@@ -1,4 +1,4 @@
-package cgg.a02;
+package cgg.a03;
 
 import cgg.Image;
 import cgg.Image;
@@ -30,7 +30,7 @@ public class Main {
 
 
         // Write the image to disk.
-    final String filename = "doc/a02-discs-supersampling.png";
+    final String filename = " doc/a02-discs-supersampling.png";
     image.write(filename);
     System.out.println("Wrote image: " + filename);
 
