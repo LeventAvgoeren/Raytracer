@@ -1,11 +1,17 @@
 /** @author henrik.tramberend@beuth-hochschule.de */
 package cgg;
 import java.util.*;
+
 import cgtools.*;
 import cgtools.Random;
 
 import static cgtools.Vector.*;
 import cgg.a02.Disc;
+import cgg.a03.Hit;
+import cgg.a03.PinholeCamera;
+import cgg.a03.Ray;
+import cgg.a03.Raytracing;
+import cgg.a03.Sphere;
 
 public class Image {
 
@@ -32,18 +38,36 @@ public class Image {
     ImageWriter.write(filename,array,width,height);
   }
 
-  public void sample(Disc disc, int runden) {
-    for (int x = 0; x < this.width; x++) {
-        for (int y = 0; y < this.height; y++) {
-            Color sampleColor = new Color(0, 0, 0);
-            for (int i = 0; i < runden; i++) {
-                Color pixelColor = disc.coloredDiscs(x + Random.random(), y + Random.random());
-                sampleColor = new Color(sampleColor.r() + pixelColor.r(), sampleColor.g() + pixelColor.g(), sampleColor.b() + pixelColor.b());
+  public void sample(int sampleRate, ArrayList<Sphere> spheres, PinholeCamera camera) {
+    Color backgroundColor = new Color(0.5f, 0.7f, 0.9f); // Ändern Sie die Werte für die gewünschte Hintergrundfarbe
+
+    for (int xPosition = 0; xPosition < width; xPosition++) {
+        for (int yPosition = 0; yPosition < height; yPosition++) {
+            Color accumulatedColor = new Color(0, 0, 0);
+            for (int sampleIndex = 0; sampleIndex < sampleRate; sampleIndex++) {
+                Ray ray = camera.generateRay(xPosition, yPosition);
+                
+                Hit nearestHit = null;
+                for (Sphere sphere : spheres) {
+                    Hit hit = sphere.intersect(ray);
+                    if (hit != null) {
+                        if ((nearestHit == null) || (hit.getRayParameterT() < nearestHit.getRayParameterT())) {
+                            nearestHit = hit;
+                        }
+                    }
+                }
+                Color currentPixelColor;
+                if (nearestHit != null) {
+                    currentPixelColor = Raytracing.shade(nearestHit.getNormVec(), nearestHit.getHitPointColor());
+                } else {
+                    currentPixelColor = backgroundColor;
+                }
+                accumulatedColor = new Color(accumulatedColor.r() + currentPixelColor.r(), accumulatedColor.g() + currentPixelColor.g(), accumulatedColor.b() + currentPixelColor.b());
             }
-            sampleColor = new Color(sampleColor.r() / runden, sampleColor.g() / runden, sampleColor.b() / runden);
-            setPixel(x, y, sampleColor);
+            Color finalColor = new Color(accumulatedColor.r() / sampleRate, accumulatedColor.g() / sampleRate, accumulatedColor.b() / sampleRate);
+            setPixel(xPosition, yPosition, finalColor);
         }
     }
-
-  }
 }
+}
+

@@ -1,29 +1,45 @@
 package cgg.a03;
-import cgg.Image;
-import cgg.a02.Disc;
-import cgtools.Color;
-import cgtools.Vector;
-
-import static cgtools.Vector.*;
-import cgg.*;
+import cgtools.*;
 
 public class Ray {
+    
+    private Point origin;
+    private Direction direc;
+    private double tMin;
+    private double tMax;
 
-        Vector origin;
-        Vector direction;
-        double tMin;
-        double tMax;
-    
-        public Ray(Vector origin, Vector direction, double tMin, double tMax) {
-            this.origin = origin;
-            this.direction = direction;
-            this.tMin = tMin;
-            this.tMax = tMax;
-        }
-    
-        public Vector pointAt(double t) {
-            return add(origin, multiply(t, direction));
-        }
-    
+    public Ray(Point origin, Direction direc, double tMin, double tMax) {
+        this.origin = origin;
+        this.direc = Vector.normalize(direc);
+        this.tMin = tMin;
+        this.tMax = tMax;
     }
 
+    public Point pointAt(double t) {
+        Direction dirT = Vector.multiply(t, direc);
+        Point point = Vector.add(dirT, origin);
+        return point;
+    }
+
+    public boolean isValid(double t) {
+        if(t>=tMin && t<=tMax) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public Direction getDirection() {
+        return direc;
+    }
+
+    public Point getOrigin() {
+        return origin;
+    }
+
+    public String toString() {
+        String returnString = "" + Ray.class;
+        return returnString;
+    }
+}

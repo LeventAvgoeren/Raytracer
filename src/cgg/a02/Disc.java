@@ -15,7 +15,7 @@ public class Disc {
      und in die liste packen 
      um abstand zu berechnen x-x 
     */
-
+    
         public Disc(int width, int height, int anzahl){
 
             
@@ -24,7 +24,7 @@ public class Disc {
                 double x = random.nextDouble() * width;
                 double y = random.nextDouble() * height;
                 Color color = new Color(random.nextDouble(), random.nextDouble(), random.nextDouble());
-                list.add(new Disc(x, y, random.nextDouble()*10+15, color));
+                list.add(new Disc(x, y, random.nextDouble()*10+1, color));
             }
         }
 

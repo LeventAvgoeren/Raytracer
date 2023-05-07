@@ -133,8 +133,8 @@ public final class Vector {
     return a.x() * a.x() + a.y() * a.y() + a.z() * a.z();
   }
 
-  public static Direction normalize(Direction a) {
-    return divide(a, length(a));
+  public static Direction normalize(Direction dir) {
+    return divide(dir, length(dir));
   }
 
   public static Point mod(Point a, Point b) {
