@@ -35,7 +35,7 @@ public class Random extends java.util.Random {
     this(System.nanoTime());
   }
 
-  private Random(final long seed) {
+  public Random(final long seed) {
     x = seed;
   }
 
