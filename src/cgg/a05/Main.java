@@ -40,7 +40,7 @@ public class Main {
 
         // Create new camera and sample pictured shapes
         Image shapes = new Image(width, height);
-        shapes.sample(100, group, camera, raytracer, 500); // Erhöhte Probenanzahl
+        //shapes.sample(100, group, camera, raytracer, 500); // Erhöhte Probenanzahl
 
         // Write the images to disk
         final String filename = "doc/a05-diffuse-spheres.png";

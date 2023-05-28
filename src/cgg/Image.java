@@ -1,13 +1,8 @@
-/** @author henrik.tramberend@beuth-hochschule.de */
+// @author henrik.tramberend@beuth-hochschule.de /
 package cgg;
 
 import cgtools.*;
-import cgg.a05.Group;
-import cgg.a05.Hit;
-import cgg.a05.PinholeCamera;
-import cgg.a05.Ray;
-import cgg.a05.Raytracing;
-import cgg.a05.Shape;
+import cgg.a06.*;
 
 
 public class Image {
@@ -29,9 +24,9 @@ public class Image {
     comp[i + 0] = Math.pow(color.r(), 1/gamma);
     comp[i + 1] = Math.pow(color.g(), 1/gamma);
     comp[i + 2] = Math.pow(color.b(), 1/gamma);
-   
+
   }
-  
+
 
   public void sample(int sampleRate, Group group, PinholeCamera camera, Raytracing raytracer, int recursionDepth) {
     Color backgroundColor = new Color(0.5f, 0.7f, 0.9f);
@@ -64,12 +59,7 @@ public class Image {
 
   public void write(String filename) {
     // Use cggtools.ImageWriter.write() to implement this.
-    
+
     ImageWriter.write(filename, comp, width, height);;
-   
   }
-
-public void sample(Raytracing Raytracing, boolean b) {
-}
-
 }

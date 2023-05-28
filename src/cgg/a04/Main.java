@@ -24,7 +24,7 @@ public class Main {
         sGroup.addShape(sGlobe3);
 
         Image sImage = new Image(sWidth, sHeight);
-        sImage.sample(8, sGroup, sCamera);
+       // sImage.sample(8, sGroup, sCamera);
 
         // Write the image to disk
         final String filename = "doc/a04-scene.png";
