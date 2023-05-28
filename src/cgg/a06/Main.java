@@ -124,7 +124,7 @@ public class Main {
         Image shapes = new Image(width, height);
         shapes.sample(100, group, camera, raytracer, 500);
 
-        final String filename = "doc/a6-camera.png";
+        final String filename = "doc/a06-camera.png";
         shapes.write(filename);
         System.out.println("Wrote image: " + filename);
     }
