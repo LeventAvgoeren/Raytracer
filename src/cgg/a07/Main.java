@@ -9,7 +9,7 @@ public class Main {
         final int height = 720;
 
         Point cameraPosition = new Point(0, 0, 0);
-        Matrix translation = Matrix.translation(0, 10, 25);
+        Matrix translation = Matrix.translation(0, 10, 20);
 
         // Rotate the camera to look downward
         Matrix rotation = Matrix.rotation(1, 0, 0, -30);
@@ -176,12 +176,12 @@ public class Main {
         }
 
         // Create smaller sphere next to the tree
-        Raytracing raytracer = new Raytracing(camera, group, 100);
+        Raytracing raytracer = new Raytracing(camera, group, 500);
 
         Image shapes = new Image(width, height);
-        shapes.sample(10, group, camera, raytracer, 100);
+        shapes.sample(100, group, camera, raytracer, 500);
 
-        final String filename = "doc/a09-camera.png";
+        final String filename = "doc/a07-scene.png";
         shapes.write(filename);
         System.out.println("Wrote image: " + filename);
     }
