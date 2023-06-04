@@ -119,12 +119,12 @@ public class Main {
             group.addShape(treeCrown);
         }
 
-        Raytracing raytracer = new Raytracing(camera, group, 500);
+        Raytracing raytracer = new Raytracing(camera, group, 100);
 
         Image shapes = new Image(width, height);
-        shapes.sample(100, group, camera, raytracer, 500);
+        //shapes.sample(10, group, camera, raytracer, 100);
 
-        final String filename = "doc/a06-camera.png";
+        final String filename = "doc/a10-camera.png";
         shapes.write(filename);
         System.out.println("Wrote image: " + filename);
     }

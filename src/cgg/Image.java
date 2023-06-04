@@ -1,8 +1,7 @@
-// @author henrik.tramberend@beuth-hochschule.de /
 package cgg;
 
 import cgtools.*;
-import cgg.a06.*;
+import cgg.a07.*;
 
 
 public class Image {
@@ -30,6 +29,8 @@ public class Image {
 
   public void sample(int sampleRate, Group group, PinholeCamera camera, Raytracing raytracer, int recursionDepth) {
     Color backgroundColor = new Color(0.5f, 0.7f, 0.9f);
+      int totalRows = height;
+      int rowsProcessed = 0;
 
     for (int xPosition = 0; xPosition < width; xPosition++) {
         for (int yPosition = 0; yPosition < height; yPosition++) {
@@ -48,9 +49,13 @@ public class Image {
             Color finalColor = Vector.divide(accumulatedColor, sampleRate);
             setPixel(xPosition, yPosition, finalColor);
         }
+        rowsProcessed++;
+        double progress = (double)rowsProcessed / totalRows * 100;
+        System.out.printf("Rendering progress: %.2f%%\n", progress);
     }
-}
 
+
+}
 
 
 
