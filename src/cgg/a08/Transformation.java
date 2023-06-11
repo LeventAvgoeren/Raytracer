@@ -1,0 +1,33 @@
+package cgg.a08;
+
+import cgtools.*;
+
+public class Transformation {
+
+    private Matrix toWorld;
+    private Matrix fromWorld;
+    private Matrix toWorldM;
+
+    public Transformation(Matrix toWorld) {
+        this.toWorld = toWorld;
+        fromWorld = Matrix.invert(toWorld);
+        toWorldM = Matrix.transpose(fromWorld);
+    }
+    
+    public Ray rayTransformation(Ray ray) {
+        Point origin = Matrix.multiply(fromWorld, ray.getOrigin());
+        Direction direction = Matrix.multiply(fromWorld, ray.getDirection());
+        return new Ray(origin, direction, 0.00000001, Double.POSITIVE_INFINITY);
+    }
+    
+    public Hit hitTransformation(Hit hit) {
+        Point cuttingPoint = Matrix.multiply(toWorld, hit.getHitPoint());
+        Direction normVector = Matrix.multiply(toWorldM, hit.getNormVec());
+        return new Hit(hit.getRayParameterT(), cuttingPoint, normVector, hit.getHitPointMaterial());
+    }
+
+    public Matrix getMatrix() {
+        return toWorld;
+    }
+    
+}

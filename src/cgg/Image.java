@@ -1,7 +1,17 @@
 package cgg;
 
 import cgtools.*;
-import cgg.a07.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import cgg.a08.*;
 
 
 public class Image {
@@ -27,35 +37,72 @@ public class Image {
   }
 
 
-  public void sample(int sampleRate, Group group, PinholeCamera camera, Raytracing raytracer, int recursionDepth) {
+ 
+  public void sample(int sampleRate, Group group, PinholeCamera camera, Raytracing raytracer, int recursionDepth, int threadCount) throws InterruptedException, ExecutionException {
     Color backgroundColor = new Color(0.5f, 0.7f, 0.9f);
-      int totalRows = height;
-      int rowsProcessed = 0;
+
+    // Thread-Pool erstellen
+    ExecutorService pool = Executors.newFixedThreadPool(threadCount);
+
+    // Fortschritt in Thread-sichere Variable auslagern
+    AtomicInteger progressCounter = new AtomicInteger();
+
+    // Batching der Pixel-Reihen in größere Aufgaben
+    int batchSize = Math.max(height / threadCount, 1);
+
+    List<Future<Void>> futures = new ArrayList<>();
 
     for (int xPosition = 0; xPosition < width; xPosition++) {
-        for (int yPosition = 0; yPosition < height; yPosition++) {
-            Color accumulatedColor = new Color(0, 0, 0);
-            for (int sampleIndex = 0; sampleIndex < sampleRate; sampleIndex++) {
-                Ray ray = camera.generateRay(xPosition, yPosition);
-                Hit nearestHit = group.intersect(ray);
-                Color currentPixelColor;
-                if (nearestHit != null) {
-                    currentPixelColor = raytracer.calculateRadiance(group, ray, recursionDepth);
-                } else {
-                    currentPixelColor = backgroundColor;
+        final int x = xPosition;
+
+        // Gruppe von Pixel-Reihen als Aufgabe einreichen
+        Future<Void> future = pool.submit(() -> {
+            for (int batchStart = 0; batchStart < height; batchStart += batchSize) {
+                int batchEnd = Math.min(batchStart + batchSize, height);
+                for (int yPosition = batchStart; yPosition < batchEnd; yPosition++) {
+                    final int y = yPosition;
+                    Color accumulatedColor = new Color(0, 0, 0);
+                    for (int sampleIndex = 0; sampleIndex < sampleRate; sampleIndex++) {
+                        Ray ray = camera.generateRay(x, y);
+                        Hit nearestHit = group.intersect(ray);
+                        Color currentPixelColor;
+                        if (nearestHit != null) {
+                            currentPixelColor = raytracer.calculateRadiance(group, ray, recursionDepth);
+                        } else {
+                            currentPixelColor = backgroundColor;
+                        }
+                        accumulatedColor = Vector.add(accumulatedColor, currentPixelColor);
+                    }
+                    Color finalColor = Vector.divide(accumulatedColor, sampleRate);
+                    setPixel(x, y, finalColor);
                 }
-                accumulatedColor = Vector.add(accumulatedColor, currentPixelColor);
             }
-            Color finalColor = Vector.divide(accumulatedColor, sampleRate);
-            setPixel(xPosition, yPosition, finalColor);
-        }
-        rowsProcessed++;
-        double progress = (double)rowsProcessed / totalRows * 100;
-        System.out.printf("Rendering progress: %.2f%%\n", progress);
+
+            // Fortschritt anzeigen
+            int progress = progressCounter.incrementAndGet();
+            System.out.printf("Rendering progress: %.2f%%\n", (double) progress / width * 100);
+
+            return null;
+        });
+
+        futures.add(future);
     }
 
+    // Warten, bis alle Aufgaben abgeschlossen sind
+    for (Future<Void> future : futures) {
+        try {
+            future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 
+    pool.shutdown();
 }
+
+
+
+
 
 
 

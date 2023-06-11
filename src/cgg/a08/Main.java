@@ -1,12 +1,16 @@
-package cgg.a07;
+package cgg.a08;
 
 import cgtools.*;
+
+import java.util.concurrent.ExecutionException;
+
 import cgg.Image;
 
 public class Main {
     public static void main(String[] args) {
-        final int width = 1280;
-        final int height = 720;
+        long start = System.currentTimeMillis();
+        final int width = 480;
+        final int height = 270;
 
         Point cameraPosition = new Point(0, 0, 0);
         Matrix translation = Matrix.translation(0, 10, 20);
@@ -57,47 +61,7 @@ public class Main {
 
         // Create random spheres around the tree circle
         double circleRadius = 6.0; // Use the same circle radius as the tree circle
-
-        double minRadius = 0.1;
-        double maxRadius = 0.4;
-        double minX = -25.0; // Define the area where the spheres can be generated
-        double maxX = 25.0;
-        double minZ = -25.0;
-        double maxZ = 25.0;
-        double treeCircleRadius = 4.0; // Radius of the tree circle
-        Material[] materials = {
-                new DiffusingMaterial(new Color(0.6, 0.2, 0.8)), // Purple diffuse material
-                new MetallMaterial(new Color(0.8, 0.8, 0.8), 0.5) // Metal material
-        };
-        // Generate random spheres
-        for (int i = 0; i < 150; i++) { // Create 50 random spheres
-            double randomRadius = minRadius + Math.random() * (maxRadius - minRadius); // Random radius between
-                                                                                       // minRadius and maxRadius
-            double x;
-            double z;
-
-            // Generate a position that is not within the tree circle
-            do {
-                x = minX + Math.random() * (maxX - minX); // Random x-coordinate
-                z = minZ + Math.random() * (maxZ - minZ); // Random z-coordinate
-            } while (Math.sqrt(x * x + z * z) < treeCircleRadius + maxRadius); // Retry if the position is within the
-                                                                               // tree circle
-
-            Point randomSphereCenter = new Point(x, -0.5 + randomRadius, z); // Positioned on the ground based on its
-                                                                             // size
-
-            Material randomMaterial = materials[(int) (Math.random() * materials.length)]; // Random material
-            Color randomColor = new Color(Math.random(), Math.random(), Math.random()); // Random color
-            if (randomMaterial instanceof DiffusingMaterial) { // Change the color if the material is diffusing
-                randomMaterial = new DiffusingMaterial(randomColor);
-            } else if (randomMaterial instanceof MetallMaterial) { // Change the color if the material is metal
-                randomMaterial = new MetallMaterial(randomColor, 0.5);
-            }
-
-            Sphere randomSphere = new Sphere(randomSphereCenter, randomRadius, randomMaterial);
-            group.addShape(randomSphere);
-        }
-
+        
         // Variables for tree components
         double treeTrunkRadius = 0.2;
         double treeTrunkHeight = 1.5;
@@ -105,7 +69,7 @@ public class Main {
         Material treeCrownMaterial = new DiffusingMaterial(new Color(0.0, 0.5, 0.0)); // Grün
 
         /// Variables for tree crown components
-        int numberOfCrownSpheres = 10; // The number of spheres to use for each tree crown
+        int numberOfCrownSpheres = 5; // The number of spheres to use for each tree crown
         double minCrownSphereRadius = 0.3; // The minimum radius of the crown spheres
         double maxCrownSphereRadius = 0.6; // The maximum radius of the crown spheres
 
@@ -174,16 +138,24 @@ public class Main {
             Group snowmanGroup = createSnowman(snowmanPosition, 1.0);
             group.addShape(snowmanGroup);
         }
+        group.calculateBounds();
 
         // Create smaller sphere next to the tree
         Raytracing raytracer = new Raytracing(camera, group, 500);
 
         Image shapes = new Image(width, height);
-       // shapes.sample(100, group, camera, raytracer, 500);
+        try {
+            shapes.sample(100, group, camera, raytracer, 500,8);
+        } catch (InterruptedException | ExecutionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        final String filename = "doc/a07-scene.png";
+        final String filename = "doc/a08-benchmark-scene.png";
         shapes.write(filename);
         System.out.println("Wrote image: " + filename);
+        long time = System.currentTimeMillis() - start;
+        System.out.println((time / 1000));
     }
 
     // Methode zum Erstellen eines Schneemanns
