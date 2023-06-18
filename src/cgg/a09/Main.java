@@ -25,7 +25,7 @@ public class Main {
         Background background = new Background(new BackgroundMaterial(new Texture("doc/Texturen/Himmel.png", Matrix.translation(0, 0, 0))));
 
         Sphere polkadot = new Sphere(Vector.point(0, 1, -1), 1, new DiffusingMaterial(new PolkaDots(Vector.black, Vector.white, 0.3, Matrix.scaling(10, 10, 10))));
-        Sphere merkur = new Sphere(Vector.point(-2.5, 1, -0.2), 1, new BackgroundMaterial(new Texture("doc/Texturen/Merkur.jpeg")));
+        Sphere merkur = new Sphere(Vector.point(-2.5, 0.8, -0.2), 1, new BackgroundMaterial(new Texture("doc/Texturen/Merkur.jpeg")));
         Sphere mars = new Sphere(Vector.point(2.5, 1, -0.7), 1, new BackgroundMaterial(new Texture("doc/Texturen/mars.png")));
         Sphere sun = new Sphere(Vector.point(0, 3.0, 0), 1, new BackgroundMaterial(new Texture("doc/Texturen/sonne.png")));
         Sphere pluto = new Sphere(Vector.point(2.5, 3.0, 0), 1, new BackgroundMaterial(new Texture("doc/Texturen/Pluti.jpeg")));
