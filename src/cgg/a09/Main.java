@@ -43,11 +43,11 @@ public class Main {
         // Create new camera and sample pictured shapes
         Image shapes = new Image(width, height);
          Raytracing raytracer = new Raytracing(camera, scene, 500);
-        try {
-            shapes.sample(100, scene, camera, raytracer, 500, 8);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+       // try {
+            //shapes.sample(100, scene, camera, raytracer, 500, 8);
+       // } catch (InterruptedException | ExecutionException e) {
+          //  e.printStackTrace();
+        //}
         
         
             

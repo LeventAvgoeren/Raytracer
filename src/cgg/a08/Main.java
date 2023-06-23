@@ -144,12 +144,12 @@ public class Main {
         Raytracing raytracer = new Raytracing(camera, group, 500);
 
         Image shapes = new Image(width, height);
-        try {
-            shapes.sample(100, group, camera, raytracer, 500,8);
-        } catch (InterruptedException | ExecutionException e) {
+       // try {
+         //   shapes.sample(100, group, camera, raytracer, 500,8);
+        //} catch (InterruptedException | ExecutionException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+          //  e.printStackTrace();
+        //}
 
         final String filename = "doc/a08-benchmark-scene.png";
         shapes.write(filename);
