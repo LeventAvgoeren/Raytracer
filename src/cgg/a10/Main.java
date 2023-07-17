@@ -146,11 +146,11 @@ public class Main {
         Raytracing raytracer = new Raytracing(camera, group, 500);
 
         Image shapes = new Image(width, height);
-        try {
-            shapes.sample(100, group, camera, raytracer, 500, 8);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        //try {
+          //  shapes.sample(100, group, camera, raytracer, 500, 8);
+        //} catch (InterruptedException | ExecutionException e) {
+         //   e.printStackTrace();
+       // }
 
         final String filename = "doc/a10.png";
         shapes.write(filename);
