@@ -128,7 +128,7 @@ public class Main {
         snowmanGroup.addShape(topSnowmanSphere);
 
         // Augen
-        double eyeDistance = 0.3 * scale; // Abstand zwischen den Augen
+        double eyeDistance = 0.3 * scale; // Abstand zwischen den Augenss
         double eyeHeight = topSnowmanSphereRadius * 1.7; // Höhe der Augen relativ zur Mitte der oberen Kugel
         double eyeDepth = topSnowmanSphereRadius - 0.1 * scale; // Tiefe der Augen relativ zur Vorderseite der oberen
                                                                 // Kugel
