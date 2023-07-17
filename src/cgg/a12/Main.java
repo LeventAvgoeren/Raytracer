@@ -8,8 +8,8 @@ import cgtools.*;
 
 public class Main {
     public static void main(String[] args) {
-         final int width = 720;
-        final int height = 480;
+         final int width = 1920;
+        final int height = 1080;
 
         Group scene = new Group(new Transformation(Matrix.identity));
         Plane ground = new Plane(Vector.point(0.0, 0.0, 0.0), Vector.direction(0.0, 1.0, 0.0),
